@@ -1,0 +1,279 @@
+$easeOutQuint: cubic-bezier(0.230, 1.000, 0.320, 1.000);
+$easeInOutQuint: cubic-bezier(0.860, 0.000, 0.070, 1.000);
+
+$easeInOutCubic: cubic-bezier(0.645, 0.045, 0.355, 1.000);
+
+
+$toc-duration: 1s;
+$toc-delay: .5s;
+$toc-ease: $easeInOutCubic;
+
+$card-duration: 1s;
+$card-delay: .75s;
+$card-stagger: .2s;
+$card-ease: $easeOutQuint;
+
+$mission-duration: 2s;
+$mission-ease: $easeInOutCubic;
+$mission-ease-out: $easeOutQuint;
+
+
+body {
+  margin: 0;
+}
+
+.stripe {
+  padding: 60px;
+  position: relative;
+}
+
+.stripe-inner {
+  margin: 0 auto;
+  max-width: 1280px;
+  position: relative;
+  width: 100%;
+  z-index: 10;
+}
+
+.mission {
+  font-size: 60px;
+  font-weight: 400;
+  line-height: 1;
+  max-width: 12em;
+  
+  .wipe {
+    font-style: normal;
+    position: relative;
+    
+    &::before,
+    &::after {
+      content: ' ';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 100%;
+      left: 0;
+    }
+    
+    &::before {
+      animation: wipe-down--text-bg $mission-duration $mission-ease;
+      animation-fill-mode: forwards;
+      background-color: #eee;
+    }
+    
+    &::after {
+      animation: wipe-down--text-highlight $mission-duration $mission-ease;
+      animation-fill-mode: forwards;
+      background-color: yellow;
+    }
+    
+    span {
+      position: relative;
+      z-index: 10;
+    }
+  }
+  
+  .fade-in {
+    animation: wipe-down--text-fade $mission-duration $mission-ease-out;
+    animation-fill-mode: forwards;
+    display: inline-block;
+    opacity: 0;
+    white-space: nowrap;
+
+    @for $i from 0 through 4 {
+      &--#{$i} {
+        animation-delay: 1s + ($i / 10);
+      }
+    }
+  }
+  
+  .line2 {
+    color: #999;
+    display: block;
+  }
+}
+
+#toc {
+  background-color: #eee;
+  
+  &::before,
+  &::after {
+    animation: wipe-across $toc-duration $toc-ease;
+    animation-delay: $toc-delay;
+    animation-fill-mode: forwards;
+    background-color: yellow;
+    content: ' ';
+    position: absolute;
+    top: 0;
+    right: 100%;
+    bottom: 0;
+    left: 0;
+  }
+  
+  &::after {
+    animation: wipe-across--bg $toc-duration $toc-ease;
+    animation-delay: $toc-delay;
+    animation-fill-mode: forwards;
+    background-color: white;
+    right: 0;
+  }
+}
+
+.card-grid {
+  display: flex;
+  flex-direction: row-reverse;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.card {
+  animation: float-in $card-duration ($toc-duration + $card-delay) $card-ease;
+  animation-fill-mode: forwards;
+  background: white;
+  box-shadow: 0 0 8px rgba(0, 0, 0, .25);
+  height: 40vw;
+  margin-bottom: 60px;
+  margin-right: 3em;
+  max-height: 600px;
+  position: relative;
+  opacity: 0;
+  width: calc(50% - 1.5em);
+  z-index: 10;
+ 
+  &:nth-child(odd) {
+    margin-right: 0;
+    margin-top: -180px;
+  }
+  
+  @for $i from 1 through 5 {
+    &:nth-child(#{$i + 1}) {
+      animation-delay: $toc-duration + $card-delay + ($card-stagger * $i);
+    }
+  }
+}
+
+@keyframes wipe-across {
+  0% {
+    left: 0;
+    right: 100%;
+  }
+  
+  45% {
+    left: 0;
+    right: 0;
+  }
+  
+  55% {
+    left: 0;
+    right: 0;
+  }
+  
+  100% {
+    left: 100%;
+    right: 0;
+  }
+}
+
+@keyframes wipe-across--bg {
+  0% {
+    left: 0;
+    right: 0;
+  }
+  
+  45% {
+    left: 100%;
+    right: 0;
+  }
+  
+  100% {
+    left: 100%;
+    right: 0;
+  }
+}
+
+
+
+@keyframes float-in {
+  0% {
+    opacity: 0;
+    transform: translateY(60px);
+  }
+  
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+
+@keyframes wipe-down--text-bg {
+  0% {
+    bottom: 100%;
+    top: 0;
+  }
+  
+  10% {
+    top: 0;
+    bottom: .1em;
+  }
+  
+  15% {
+    top: 0;
+    bottom: .1em;
+  }
+  
+  25% {
+    top: 100%;
+    bottom: .1em;
+  }
+  
+  100% {
+    top: 100%;
+    bottom: .1em;
+  }
+}
+
+@keyframes wipe-down--text-highlight {
+  0% {
+    top: 0;
+    bottom: 100%;
+  }
+  
+  15% {
+    top: 0;
+    bottom: 100%;
+  }
+
+  25% {
+    top: 0;
+    bottom: .1em;
+  }
+  
+  30% {
+    top: 0;
+    bottom: .1em;
+  }
+  
+  40% {
+    top: .7em;
+    bottom: .1em;
+  }
+ 
+  100% {
+    top: .7em;
+    bottom: .1em;
+  }
+}
+
+@keyframes wipe-down--text-fade {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
